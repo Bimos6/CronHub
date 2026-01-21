@@ -1,0 +1,87 @@
+# Laravel
+laravel/vendor/
+laravel/node_modules/
+laravel/.env
+laravel/.env.*
+laravel/.phpunit.result.cache
+laravel/storage/framework/cache/
+laravel/storage/framework/sessions/
+laravel/storage/framework/views/
+laravel/storage/logs/
+laravel/bootstrap/cache/
+laravel/public/hot
+laravel/public/storage
+
+# Python
+python-scheduler/__pycache__/
+python-scheduler/.env
+python-scheduler/.venv/
+python-scheduler/venv/
+python-scheduler/env/
+python-scheduler/*.pyc
+python-scheduler/*.pyo
+python-scheduler/*.pyd
+python-scheduler/.Python
+
+python-worker/__pycache__/
+python-worker/.env
+python-worker/.venv/
+python-worker/venv/
+python-worker/env/
+python-worker/*.pyc
+python-worker/*.pyo
+python-worker/*.pyd
+python-worker/.Python
+
+# Docker
+docker-compose.override.yml
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+.fleet/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Composer
+composer.lock
+composer.phar
+
+# Testing
+.phpunit.cache
+.phpunit.result.cache
+/.phpunit.cache/*
+/.phpunit.result.cache/*
+
+# Laravel specific
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+Homestead.json
+Homestead.yaml
+auth.json
+yarn-error.log
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Project specific (добавь если будут)
+# /secrets/
+# /config/local/
