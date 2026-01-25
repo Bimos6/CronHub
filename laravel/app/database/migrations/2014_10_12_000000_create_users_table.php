@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('timezone')->default('UTC')->after('password');
+            $table->string('api_token', 80)->unique()->nullable()->after('timezone');
+            $table->boolean('is_admin')->default(false)->after('api_token');
             $table->rememberToken();
             $table->timestamps();
         });
