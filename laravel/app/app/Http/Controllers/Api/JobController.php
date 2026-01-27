@@ -3,95 +3,64 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Job;
 use App\Http\Requests\StoreJobRequest;
-use Illuminate\Http\Request;
+use App\Services\Contracts\IJobService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    public function __construct(private IJobService $jobService) {}
+    
     public function index(Request $request): JsonResponse
     {
-        $jobs = Job::query()
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
-
-        return response()->json([
-            'data' => $jobs->items(),
-            'meta' => [
-                'current_page' => $jobs->currentPage(), 
-                'last_page' => $jobs->lastPage(),        
-                'per_page' => $jobs->perPage(),          
-                'total' => $jobs->total(),                 
-            ]
-        ]);
+        $result = $this->jobService->getUserJobs($request->user()->id);
+        return response()->json($result);
     }
-
+    
     public function store(StoreJobRequest $request): JsonResponse
     {
-        $validated = $request->validated();
-        $validated['user_id'] = $request->user()->id;
-        
-        $job = Job::create($validated);
-
-        return response()->json([
-            'message' => 'Job created successfully',
-            'data' => $job
-        ], 201);
+        $result = $this->jobService->createJob($request->validated(), $request->user()->id);
+        return response()->json($result, 201);
     }
-
-    public function show(string $id): JsonResponse
+    
+    public function show(Request $request, string $id): JsonResponse
     {
-        $job = Job::findOrFail($id);
-
-        return response()->json([
-            'data' => $job
-        ]);
+        $result = $this->jobService->getUserJob((int)$id, $request->user()->id);
+        return response()->json($result);
     }
-
-    public function update(StoreJobRequest $request, string $id)
+    
+    public function update(StoreJobRequest $request, string $id): JsonResponse
     {
-        $job = Job::findOrFail($id);
-
-        $validated = $request->validated();
-
-        $job->update($validated);
-
-        return response()>json([
-            'message' => 'Job updated successfully',
-            'data' => $job
-        ]);
+        $result = $this->jobService->updateJob((int)$id, $request->user()->id, $request->validated());
+        return response()->json($result);
     }
-
-    public function destroy(string $id): JsonResponse
+    
+    public function destroy(Request $request, string $id): JsonResponse
     {
-        $job = Job::findOrFail($id);
-
-        $job->delete();
-
-        return response()->json([
-            'message' => 'Job deleted successfully'
-        ]);
+        $result = $this->jobService->deleteJob((int)$id, $request->user()->id);
+        return response()->json($result);
     }
-
-    public function executions(Request $request, Job $job): JsonResponse
+    
+    public function dueJobs(Request $request): JsonResponse
     {
-        if($job->user_id !== $request->user()->id){
-            abort(403, 'Unauthorized');
-        }
-
-        $executions = $job->executions()
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
-
-        return response()->json([
-            'data' => $executions->items(),
-            'meta' => [
-                'current_page' => $executions->currentPage(),
-                'last_page' => $executions->lastPage(),
-                'per_page' => $executions->perPage(),
-                'total' => $executions->total(),
-            ]
-        ]);
+        $result = $this->jobService->getDueJobs($request->header('X-Scheduler-Token'));
+        return response()->json($result);
+    }
+    
+    public function storeExecution(Request $request, string $id): JsonResponse
+    {
+        $result = $this->jobService->saveExecution(
+            (int)$id, 
+            $request->all(), 
+            $request->header('X-Worker-Token')
+        );
+        return response()->json($result, 201);
+    }
+    
+    public function executions(Request $request, string $id): JsonResponse
+    {
+        $result = $this->jobService->getExecutions((int)$id, $request->user()->id);
+        return response()->json($result);
     }
 }
