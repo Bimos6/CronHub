@@ -53,6 +53,13 @@ class JobRepository implements IJobRepository
             ->first();
     }
 
+    public function allJobsForUser(int $userId, int $perPage = 20): LengthAwarePaginator
+    {
+        return Job::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
+
     public function getStats(int $userId): array
     {
         return [

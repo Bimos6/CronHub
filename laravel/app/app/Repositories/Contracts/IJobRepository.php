@@ -16,5 +16,6 @@ interface IJobRepository
     
     public function getDueJobs(int $limit = 100): Collection;
     public function findForUser(int $id, int $userId): ?Job;
+    public function allJobsForUser(int $userId, int $perPage = 20): LengthAwarePaginator;
     public function getStats(int $userId): array;
 }

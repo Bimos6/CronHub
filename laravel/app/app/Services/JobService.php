@@ -7,6 +7,7 @@ use App\Repositories\Contracts\IJobRepository;
 use App\Services\Contracts\IJobService;
 use App\Services\Contracts\ICronService;
 
+//TODO: почистить код в файле
 class JobService implements IJobService
 {
     public function __construct(
@@ -29,18 +30,10 @@ class JobService implements IJobService
     
     public function getUserJobs(int $userId): array
     {
-        $paginator = $this->repository->all(new \App\Models\Job());
-        $stats = $this->repository->getStats($userId);
+        $jobs = $this->repository->allJobsForUser($userId);
         
         return [
-            'jobs' => $paginator->items(),
-            'pagination' => [
-                'current_page' => $paginator->currentPage(),
-                'last_page' => $paginator->lastPage(),
-                'per_page' => $paginator->perPage(),
-                'total' => $paginator->total(),
-            ],
-            'stats' => $stats
+            'jobs' => $jobs,
         ];
     }
     
@@ -50,6 +43,12 @@ class JobService implements IJobService
         return ['job' => $job];
     }
     
+    public function getJob(int $jobId)
+    {
+        $job = $this->repository->find($jobId);
+        return $job;
+    }
+
     public function updateJob(int $jobId, int $userId, array $data): array
     {
         $job = $this->repository->findForUser($jobId, $userId);
@@ -63,9 +62,9 @@ class JobService implements IJobService
         return ['job' => $job->fresh()];
     }
     
-    public function deleteJob(int $jobId, int $userId): array
+    public function deleteJob(int $jobId): array
     {
-        $job = $this->repository->findForUser($jobId, $userId);
+        $job = $this->repository->find($jobId);
         $this->repository->delete($job);
         
         return ['deleted' => true];
@@ -89,35 +88,5 @@ class JobService implements IJobService
         }
         
         return ['jobs' => $jobs];
-    }
-    
-    public function saveExecution(int $jobId, array $data, string $token): array
-    {
-        if ($token !== config('app.worker_token')) {
-            return ['error' => 'Unauthorized'];
-        }
-        
-        $job = $this->repository->find($jobId);
-        
-        $execution = Execution::create([
-            'job_id' => $jobId,
-            'status_code' => $data['status_code'],
-            'response_body' => $data['response_body'] ?? null,
-            'response_headers' => $data['response_headers'] ?? null,
-            'error_message' => $data['error_message'] ?? null,
-            'duration_ms' => $data['duration_ms'],
-            'started_at' => $data['started_at'],
-            'finished_at' => $data['finished_at'] ?? now(),
-        ]);
-        
-        return ['execution' => $execution];
-    }
-    
-    public function getExecutions(int $jobId, int $userId): array
-    {
-        $job = $this->repository->findForUser($jobId, $userId);
-        $executions = $job->executions()->paginate(20);
-        
-        return ['executions' => $executions];
     }
 }
