@@ -38,29 +38,13 @@ class JobController extends Controller
     
     public function destroy(Request $request, string $id): JsonResponse
     {
-        $result = $this->jobService->deleteJob((int)$id, $request->user()->id);
+        $result = $this->jobService->deleteJob((int)$id);
         return response()->json($result);
     }
     
     public function dueJobs(Request $request): JsonResponse
     {
         $result = $this->jobService->getDueJobs($request->header('X-Scheduler-Token'));
-        return response()->json($result);
-    }
-    
-    public function storeExecution(Request $request, string $id): JsonResponse
-    {
-        $result = $this->jobService->saveExecution(
-            (int)$id, 
-            $request->all(), 
-            $request->header('X-Worker-Token')
-        );
-        return response()->json($result, 201);
-    }
-    
-    public function executions(Request $request, string $id): JsonResponse
-    {
-        $result = $this->jobService->getExecutions((int)$id, $request->user()->id);
         return response()->json($result);
     }
 }

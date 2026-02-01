@@ -14,7 +14,7 @@ class StoreJobRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => 'required|string|max:255',
             'url' => 'required|url|max:2000',
             'cron_expression' => [
@@ -29,16 +29,26 @@ class StoreJobRequest extends FormRequest
             ],
             'payload' => 'nullable|array',
             'headers' => 'nullable|array',
-            'is_active' => 'boolean', 
+            'is_active' => 'boolean',
         ];
+        
+        if ($this->has('job')) {
+            $nestedRules = [];
+            foreach ($rules as $field => $rule) {
+                $nestedRules["job.$field"] = $rule;
+            }
+            return $nestedRules;
+        }
+        
+        return $rules;
     }
 
     public function messages(): array
     {
         return [
-            'cron_expression.regex' => 'Неверный формат cron выражения',
-            'url.url' => 'Указан неверный формат URL',
-            'method.in' => 'Метод должен быть одним из: GET, POST, PUT, PATCH, DELETE',
+            'job.cron_expression.regex' => 'Неверный формат cron выражения',
+            'job.url.url' => 'Указан неверный формат URL',
+            'job.method.in' => 'Метод должен быть одним из: GET, POST, PUT, PATCH, DELETE',
         ];
     }
 }

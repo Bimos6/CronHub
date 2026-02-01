@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
 
 class Execution extends Model
 {
+    use AsSource, Filterable;
+
     protected $fillable = [
         'job_id',
         'status_code',
@@ -24,6 +28,10 @@ class Execution extends Model
         'finished_at' => 'datetime',
         'duration_ms' => 'integer',
         'status_code' => 'integer',   
+    ];
+
+    protected $allowedSorts = [
+        'job_id',
     ];
 
     public function job(): BelongsTo
