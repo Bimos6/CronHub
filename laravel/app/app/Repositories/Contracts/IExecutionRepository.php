@@ -10,5 +10,7 @@ interface IExecutionRepository
 {
     public function create(array $data);
     public function all(): Collection;
-    public function paginate(int $perPage = 20): LengthAwarePaginator;
+    public function paginate(int $userId, int $perPage = 20): LengthAwarePaginator;
+    public function getByUserId(int $userId): Collection;
+    public function getPaginatedByUserId(int $userId, int $perPage = 20): LengthAwarePaginator;
 }

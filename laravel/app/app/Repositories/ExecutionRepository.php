@@ -19,8 +19,24 @@ class ExecutionRepository implements IExecutionRepository
         return Execution::all();
     }
 
-    public function paginate(int $perPage = 20): LengthAwarePaginator
+    public function paginate(int $userId, int $perPage = 20): LengthAwarePaginator
     {
-        return Execution::paginate($perPage);
+        return Execution::whereHas('job', function($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->paginate($perPage);
+    }
+
+    public function getByUserId(int $userId): Collection
+    {
+        return Execution::whereHas('job', function($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
+    }
+
+    public function getPaginatedByUserId(int $userId, int $perPage = 20): LengthAwarePaginator
+    {
+        return Execution::whereHas('job', function($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->paginate($perPage);
     }
 }

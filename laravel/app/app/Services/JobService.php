@@ -7,7 +7,6 @@ use App\Repositories\Contracts\IJobRepository;
 use App\Services\Contracts\IJobService;
 use App\Services\Contracts\ICronService;
 
-//TODO: почистить код в файле
 class JobService implements IJobService
 {
     public function __construct(
@@ -49,9 +48,9 @@ class JobService implements IJobService
         return $job;
     }
 
-    public function updateJob(int $jobId, int $userId, array $data): array
+    public function updateJob(int $jobId, array $data): array
     {
-        $job = $this->repository->findForUser($jobId, $userId);
+        $job = $this->repository->findForUser($jobId);
         
         if (isset($data['cron_expression'])) {
             $data['next_run_at'] = $this->cronService->getNextRunDate($data['cron_expression']);

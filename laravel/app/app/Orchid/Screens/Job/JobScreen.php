@@ -19,7 +19,6 @@ class JobScreen extends Screen
     public function query(): array
     {
         $userId = auth()->id();
-        
         $data = $this->jobService->getUserJobs($userId);
 
         return [

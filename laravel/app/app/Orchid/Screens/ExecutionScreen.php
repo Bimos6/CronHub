@@ -15,7 +15,8 @@ class ExecutionScreen extends Screen
 
     public function query(): array
     {
-        $data = $this->executionService->getAllExecutions();
+        $userId = auth()->id();
+        $data = $this->executionService->getAllExecutions($userId);
 
         return [
             'executions' => $data['executions'],

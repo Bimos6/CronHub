@@ -38,7 +38,7 @@ class JobController extends Controller
     
     public function destroy(Request $request, string $id): JsonResponse
     {
-        $result = $this->jobService->deleteJob((int)$id);
+        $result = $this->jobService->deleteJob((int)$id, $request->user()->id);
         return response()->json($result);
     }
     

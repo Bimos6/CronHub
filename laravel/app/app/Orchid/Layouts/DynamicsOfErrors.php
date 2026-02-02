@@ -4,17 +4,17 @@ namespace App\Orchid\Layouts;
 
 use Orchid\Screen\Layouts\Chart;
 
-class DynamicsOfExecutions extends Chart
+class DynamicsOfErrors extends Chart
 {
     /**
      * Add a title to the Chart.
      *
      * @var string
      */
-    protected $title = 'Выполнения задач';
+    protected $title = 'График ошибок';
 
     protected $colors = [
-        '#2274A5',
+        '#ff0000',
     ];
 
     /**
@@ -34,5 +34,5 @@ class DynamicsOfExecutions extends Chart
      *
      * @var string
      */
-    protected $target = 'executions';
+    protected $target = 'errors';
 }

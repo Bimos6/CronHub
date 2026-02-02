@@ -3,9 +3,10 @@
 namespace App\Orchid\Screens;
 
 use App\Orchid\Layouts\DynamicsOfExecutions;
+use App\Orchid\Layouts\DynamicsOfErrors;
 use Orchid\Screen\Screen;
 use App\Models\Execution;
-use App\Models\Job;
+use App\Services\Contracts\IExecutionService;
 use Orchid\Support\Facades\Layout;
 
 class DashboardScreen extends Screen
@@ -13,27 +14,34 @@ class DashboardScreen extends Screen
     public $name = 'Дашборд';
     public $description = 'График выполнения крон задач';
 
-    /* 
-    TODO: разобраться в скрипте, доработать график:
-        -Добавить вторую линию которая будет отображать количество задач с ошибкой
-        -Добавить три окна: всего выполненных задач, выполненные успешно, выполненные с ошибкой)
-        -В скрипте идёт запрос к бд - это плохая архитектура, нужен репозиторий
-    */
+    public function __construct(private IExecutionService $executionService){}
+
     public function query(): array
     {
         $labels = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
         $values = [0, 0, 0, 0, 0, 0, 0];
+        $errorValues = [0, 0, 0, 0, 0, 0, 0];
         
-        $executions = Execution::all();
+        $userId = auth()->id();
+        $executions = $this->executionService->getAllExecutionsForChart($userId);
         
         foreach ($executions as $execution) {
             if ($execution->started_at) {
                 $dayOfWeek = date('w', strtotime($execution->started_at));
-                
                 $index = $dayOfWeek - 1;
-                if ($index < 0) $index = 6; 
-                
+                if ($index < 0) $index = 6;
                 $values[$index]++;
+            }
+        }
+
+        foreach ($executions as $execution) {
+            if ($execution->started_at && 
+                ($execution->status_code !== 200 || !empty($execution->error_message))) {
+                
+                $dayOfWeek = date('w', strtotime($execution->started_at));
+                $index = $dayOfWeek - 1;
+                if ($index < 0) $index = 6;
+                $errorValues[$index]++;
             }
         }
 
@@ -43,6 +51,13 @@ class DashboardScreen extends Screen
                     'labels' => $labels,
                     'name' => 'Выполнения задач за неделю',
                     'values' => $values,
+                ]
+            ],
+            'errors' => [
+                [
+                    'labels' => $labels,
+                    'name' => 'Задач с ошибкой',
+                    'values' => $errorValues,
                 ]
             ],
         ];
@@ -55,8 +70,9 @@ class DashboardScreen extends Screen
 
     public function layout(): iterable
     {
-        return [
+        return [     
             DynamicsOfExecutions::class,
+            DynamicsOfErrors::class,           
         ];
     }
 }
