@@ -7,6 +7,7 @@ use App\Orchid\Layouts\DynamicsOfErrors;
 use Orchid\Screen\Screen;
 use App\Models\Execution;
 use App\Services\Contracts\IExecutionService;
+use App\Services\Contracts\IDashboardService;
 use Orchid\Support\Facades\Layout;
 
 class DashboardScreen extends Screen
@@ -14,36 +15,21 @@ class DashboardScreen extends Screen
     public $name = 'Дашборд';
     public $description = 'График выполнения крон задач';
 
-    public function __construct(private IExecutionService $executionService){}
+    public function __construct(
+        private IExecutionService $executionService,
+        private IDashboardService $dashboardService
+        ){}
 
     public function query(): array
     {
         $labels = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-        $values = [0, 0, 0, 0, 0, 0, 0];
-        $errorValues = [0, 0, 0, 0, 0, 0, 0];
         
         $userId = auth()->id();
         $executions = $this->executionService->getAllExecutionsForChart($userId);
         
-        foreach ($executions as $execution) {
-            if ($execution->started_at) {
-                $dayOfWeek = date('w', strtotime($execution->started_at));
-                $index = $dayOfWeek - 1;
-                if ($index < 0) $index = 6;
-                $values[$index]++;
-            }
-        }
+        $values = $this->dashboardService->executionsStatsValues($executions);
+        $errorValues = $this->dashboardService->executionsErrorsStatsValues($executions);
 
-        foreach ($executions as $execution) {
-            if ($execution->started_at && 
-                ($execution->status_code !== 200 || !empty($execution->error_message))) {
-                
-                $dayOfWeek = date('w', strtotime($execution->started_at));
-                $index = $dayOfWeek - 1;
-                if ($index < 0) $index = 6;
-                $errorValues[$index]++;
-            }
-        }
 
         return [
             'executions' => [
