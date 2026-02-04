@@ -17,7 +17,7 @@ class JobFactory extends Factory
             'name' => $this->faker->words(3, true),
             'url' => $this->faker->url(),
             'method' => $this->faker->randomElement(['GET', 'POST', 'PUT', 'DELETE']),
-            'cron_expression' => $this->faker->randomElement(['* * * * *', '*/5 * * * *', '0 * * * *']),
+            'cron_expression' => $this->faker->randomElement(['* * * * *', '*/5 * * * *', '*/30 * * * *']),
             'payload' => null,
             'headers' => null,
             'is_active' => true,
