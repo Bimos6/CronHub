@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Cron\CronExpression;
 
 class StoreJobRequest extends FormRequest
 {
@@ -20,7 +21,11 @@ class StoreJobRequest extends FormRequest
             'cron_expression' => [
                 'required',
                 'string',
-                'regex:/^(\*|([0-9]|[1-5][0-9])(,([0-9]|[1-5][0-9]))*)(\s+(\*|([0-9]|[1-5][0-9])(,([0-9]|[1-5][0-9]))*)){4}$/'  
+                function ($attribute, $value, $fail) {
+                    if (!CronExpression::isValidExpression($value)) {
+                        $fail('Неверный формат cron выражения');
+                    }
+                },
             ],
             'method' => [
                 'required',
