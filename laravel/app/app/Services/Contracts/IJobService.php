@@ -10,7 +10,7 @@ interface IJobService
     public function getUserJobs(int $userId): array;
     public function getUserJob(int $jobId, int $userId): array;
     public function getJob(int $jobId);
-    public function updateJob(int $jobId, array $data): array;
+    public function updateJob(int $jobId, int $userId, array $data): array;
     public function deleteJob(int $jobId): array;
     
     public function getDueJobs(string $token): array;

@@ -9,9 +9,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ExecutionRepository implements IExecutionRepository
 {
-    public function create(array $data)
+    public function create(array $data): Execution
     {
-        Execution::create($data);
+        return Execution::create($data);
     }
     
     public function all(): Collection

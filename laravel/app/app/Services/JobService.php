@@ -48,9 +48,9 @@ class JobService implements IJobService
         return $job;
     }
 
-    public function updateJob(int $jobId, array $data): array
+    public function updateJob(int $jobId, int $userId, array $data): array
     {
-        $job = $this->repository->findForUser($jobId);
+        $job = $this->repository->findForUser($jobId, $userId);
         
         if (isset($data['cron_expression'])) {
             $data['next_run_at'] = $this->cronService->getNextRunDate($data['cron_expression']);

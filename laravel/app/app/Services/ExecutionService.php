@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Execution;
 use App\Repositories\Contracts\IExecutionRepository;
 use App\Repositories\Contracts\IJobRepository;
 use App\Services\Contracts\IExecutionService;
@@ -13,6 +14,12 @@ class ExecutionService implements IExecutionService
         private IExecutionRepository $executionRepository
     ) {}
     
+    public function createExecution(array $data): array
+    {
+        $execution = $this->executionRepository->create($data);
+        return ['execution' => $execution];
+    }
+
     public function saveExecution(array $data, string $token)
     {
         if ($token !== config('app.worker_token')) {
