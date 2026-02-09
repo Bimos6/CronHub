@@ -1,4 +1,3 @@
-# Laravel
 laravel/vendor/
 laravel/node_modules/
 laravel/.env
@@ -12,62 +11,67 @@ laravel/bootstrap/cache/
 laravel/public/hot
 laravel/public/storage
 
-# Python
-python-scheduler/__pycache__/
-python-scheduler/.env
-python-scheduler/.venv/
-python-scheduler/venv/
-python-scheduler/env/
-python-scheduler/*.pyc
-python-scheduler/*.pyo
-python-scheduler/*.pyd
-python-scheduler/.Python
+go-scheduler/bin/
+go-scheduler/pkg/
+go-scheduler/.env
+go-scheduler/.env.*
+go-worker/bin/
+go-worker/pkg/
+go-worker/.env
+go-worker/.env.*
 
-python-worker/__pycache__/
-python-worker/.env
-python-worker/.venv/
-python-worker/venv/
-python-worker/env/
-python-worker/*.pyc
-python-worker/*.pyo
-python-worker/*.pyd
-python-worker/.Python
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.prof
+*.cover
+*.coverprofile
+/vendor/
+.cache/
 
-# Docker
+go-scheduler/vendor/
+go-worker/vendor/
+
+
 docker-compose.override.yml
 .env
 .env.local
 .env.*.local
 
-# IDE
 .vscode/
 .idea/
 .fleet/
 *.swp
 *.swo
+*.sublime-*
 
-# OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 desktop.ini
 
-# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+linter-output/
+test-results/
 
-# Composer
 composer.lock
 composer.phar
-
-# Testing
 .phpunit.cache
 .phpunit.result.cache
 /.phpunit.cache/*
 /.phpunit.result.cache/*
 
-# Laravel specific
 /public/build
 /public/hot
 /public/storage
@@ -77,11 +81,39 @@ Homestead.yaml
 auth.json
 yarn-error.log
 
-# Temporary files
 *.tmp
 *.temp
 .cache/
+/tmp/
 
-# Project specific (добавь если будут)
-# /secrets/
-# /config/local/
+/secrets/
+/config/local/
+
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+
+.idea/
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+go-scheduler/.cover/
+go-worker/.cover/
+
+*.bench
+*.benchmark
+
+*.coverprofile
+coverage.out
+coverage.html
+coverage.txt
+
+dist/
+release/
+
+.devcontainer/
+.local/
