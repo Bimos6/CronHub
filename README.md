@@ -1,2 +1,1 @@
-# CronHub
-CronHub is a simple and reliable service for automatically executing scheduled tasks.
+A microservice worker for processing tasks from a Redis queue.
