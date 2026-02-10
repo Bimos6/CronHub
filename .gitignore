@@ -12,13 +12,16 @@ laravel/public/hot
 laravel/public/storage
 
 go-scheduler/bin/
-go-scheduler/pkg/
+go-scheduler/scheduler
 go-scheduler/.env
 go-scheduler/.env.*
+go-scheduler/vendor/
+
 go-worker/bin/
-go-worker/pkg/
+go-worker/worker
 go-worker/.env
 go-worker/.env.*
+go-worker/vendor/
 
 *.exe
 *.exe~
@@ -30,16 +33,12 @@ go-worker/.env.*
 *.prof
 *.cover
 *.coverprofile
-/vendor/
 .cache/
 
-go-scheduler/vendor/
-go-worker/vendor/
-
-docker-compose.override.yml
 .env
 .env.local
 .env.*.local
+docker-compose.override.yml
 
 .vscode/
 .idea/
@@ -70,7 +69,6 @@ composer.phar
 .phpunit.result.cache
 /.phpunit.cache/*
 /.phpunit.result.cache/*
-
 /public/build
 /public/hot
 /public/storage
@@ -78,37 +76,18 @@ composer.phar
 Homestead.json
 Homestead.yaml
 auth.json
-yarn-error.log
 
 *.tmp
 *.temp
-.cache/
 /tmp/
 
 /secrets/
 /config/local/
 
-*.iml
-.idea/
-
-.vscode/settings.json
-.vscode/launch.json
-.vscode/tasks.json
-
-.idea/
-
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
 go-scheduler/.cover/
 go-worker/.cover/
-
 *.bench
 *.benchmark
-
 *.coverprofile
 coverage.out
 coverage.html
@@ -119,3 +98,4 @@ release/
 
 .devcontainer/
 .local/
+EOF
