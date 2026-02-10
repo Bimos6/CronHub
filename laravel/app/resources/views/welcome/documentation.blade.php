@@ -114,36 +114,6 @@
                 </ul>
             </div>
             
-            <div class="mb-4">
-                <h5>🛠️ Технологический стек</h5>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="p-3 border rounded text-center">
-                            <strong>Laravel 10</strong><br>
-                            <small>PHP фреймворк</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="p-3 border rounded text-center">
-                            <strong>PostgreSQL</strong><br>
-                            <small>База данных</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="p-3 border rounded text-center">
-                            <strong>Python 3.11(FastAPI)</strong><br>
-                            <small>Воркеры</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="p-3 border rounded text-center">
-                            <strong>Docker</strong><br>
-                            <small>Контейнеризация</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <div class="alert alert-light border">
                 <h6 class="alert-heading">ℹ️ Статус</h6>
                 <p class="mb-0">
