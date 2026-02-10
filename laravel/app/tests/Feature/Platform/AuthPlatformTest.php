@@ -12,8 +12,10 @@ class AuthPlatformTest extends TestCase
 
     public function test_user_can_access_orchid_dashboard()
     {
+        $uniqueEmail = 'user_' . uniqid() . '@example.com';
+
         $user = User::factory()->withDefaultAccess()->create([
-            'email' => 'user@example.com',
+            'email' => $uniqueEmail,
             'password' => bcrypt('password'),
         ]);
 

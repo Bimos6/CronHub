@@ -2,24 +2,25 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
     public function run()
     {
-        if (!User::whereEmail('admin@example.com')->exists()) {
-            User::factory()->admin()->create([
-                'email' => 'admin@example.com',
-                'name' => 'Administrator',   
-                'password' => 'qwerty',     
-            ]);
-            
-            echo "Администратор успешно создан.\n";
-        } else {
-            echo "Пользователь с email admin@example.com уже существует.\n";
-        }
+        User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('qwerty'), 
+            'email_verified_at' => now(),
+            'permissions' => [
+                'platform.index' => true,
+                'platform.systems.roles' => true,
+                'platform.systems.users' => true,
+                'platform.systems.attachment' => true,
+            ],
+        ]);
     }
 }
