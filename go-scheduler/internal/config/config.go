@@ -30,11 +30,11 @@ func Load() *Config {
 }
 
 func setupViper() {
-    viper.SetDefault("LARAVEL_URL", "http://localhost:8000")
-    viper.SetDefault("REDIS_URL", "redis://localhost:6379")
+    viper.SetDefault("LARAVEL_URL", "http://laravel:8000")
+    viper.SetDefault("REDIS_URL", "redis://redis:6379")
     viper.SetDefault("QUEUE_NAME", "job_queue")
     viper.SetDefault("INTERVAL_SECONDS", 60)
-    viper.SetDefault("SERVICE_KEY", "")
+    viper.SetDefault("SERVICE_KEY", "worker-secret-key")
     
     viper.SetConfigFile(".env")
     viper.AutomaticEnv()

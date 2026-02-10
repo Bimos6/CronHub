@@ -1,0 +1,109 @@
+services:
+  laravel:
+    build: 
+      context: ./laravel
+      dockerfile: Dockerfile
+    ports:
+      - "8000:9000"
+    environment:
+      - APP_NAME=CronHub
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_URL=http://localhost:8000
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=cronhub
+      - DB_USERNAME=cronhub_user
+      - DB_PASSWORD=qwerty
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QUEUE_CONNECTION=redis
+      - SCHEDULER_SERVICE_KEY=worker-secret-key
+    volumes:
+      - ./laravel/app:/var/www/html
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - cron-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=cronhub
+      - POSTGRES_USER=cronhub_user
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cron-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cronhub_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - cron-network
+    command: redis-server --appendonly yes
+
+  go-scheduler:
+    build: ./go-scheduler
+    environment:
+      - LARAVEL_URL=http://laravel:9000
+      - SERVICE_KEY=worker-secret-key
+      - REDIS_URL=redis://redis:6379
+      - QUEUE_NAME=job_queue
+      - INTERVAL_SECONDS=60
+      - LOG_LEVEL=debug
+    depends_on:
+      laravel:
+        condition: service_started
+      redis:
+        condition: service_started
+    networks:
+      - cron-network
+    restart: unless-stopped
+
+  go-worker:
+    build: ./go-worker
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - QUEUE_NAME=job_queue
+      - WORKERS=3
+      - TIMEOUT_SECONDS=30
+      - MAX_RETRIES=3
+      - LOG_LEVEL=debug
+    depends_on:
+      - redis
+    networks:
+      - cron-network
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - cron-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  cron-network:
+    driver: bridge
