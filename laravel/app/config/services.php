@@ -13,6 +13,9 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'scheduler' => [
+        'token' => env('SCHEDULER_TOKEN', 'worker-secret-key'),
+    ],
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),

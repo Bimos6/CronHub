@@ -71,7 +71,9 @@ class JobService implements IJobService
     
     public function getDueJobs(string $token): array
     {
-        if ($token !== config('app.scheduler_token')) {
+        $validToken = config('services.scheduler.token');
+        
+        if ($token !== $validToken) {
             return ['error' => 'Unauthorized'];
         }
         

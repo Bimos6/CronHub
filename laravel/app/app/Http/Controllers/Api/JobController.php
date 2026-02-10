@@ -44,7 +44,7 @@ class JobController extends Controller
     
     public function dueJobs(Request $request): JsonResponse
     {
-        $result = $this->jobService->getDueJobs($request->header('X-Scheduler-Token'));
+        $result = $this->jobService->getDueJobs($request->header('X-Service-Key'));
         return response()->json($result);
     }
 }
