@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\ExecutionController;
 Route::prefix('v1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
+    
+    Route::get('/jobs/due', [JobController::class, 'dueJobs']);
 });
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
