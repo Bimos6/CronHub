@@ -1,39 +1,40 @@
-# CronHub - Система планирования HTTP-запросов
+# ⏰ CronHub - Система планирования HTTP-запросов
 
 ## 🚀 Быстрый старт
 
 ### Вариант 1: С Docker Compose (рекомендуется)
+
+```bash
 # Клонирование репозитория
-git clone <repository-url>
+git clone https://github.com/Bimos6/CronHub.git
 cd CronHub
 
 # Запуск всех сервисов
 docker compose up -d --build
 
-# Остановка
-docker compose down
+# Проверка статуса
+docker compose ps
 
-# Просмотр логов
-docker compose logs -f
-
+#Админка
+http://localhost:8000/admin
+```
 ### Вариант 2: С Make
+
+```bash
 # Установите make если нет
 # Ubuntu/Debian: sudo apt-get install make
 # macOS: brew install make
 # Windows: установите через Chocolatey или WSL
 
-# Клонирование
-git clone <repository-url>
+# Клонирование репозитория
+git clone https://github.com/Bimos6/CronHub.git
 cd CronHub
 
-# Запуск
+#Билд контейнеров
+make build
+#Запуск
 make up
 
-# Остановка
-make down
-
-# Статус контейнеров
-make status
-
-# Просмотр логов
-make logs
+#Админка
+http://localhost:8000/admin
+```
