@@ -34,7 +34,13 @@ cd CronHub
 make build
 #Запуск
 make up
+```
 
-#Админка
+### Админка
+
+```bash
 http://localhost:8000/admin
+
+email: admin@example.com
+password: qwerty
 ```
